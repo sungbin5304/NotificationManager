@@ -10,6 +10,9 @@ NotificationManager for Android Java
    
 3. Make Notification
    <pre><code>NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");
+   
+   Or
+   
    String[] box = new String[6];
    box[0] = "One";
    box[1] = "Two";
