@@ -14,7 +14,7 @@ NotificationManager for Android Java
    
 3. Make Notification
    ``` java
-   NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");</code></pre>
+   NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");
 
    Or
    
