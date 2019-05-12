@@ -14,7 +14,7 @@ NotificationManager for Android Java
 
    Or
    
-   <pre><code>String[] box = new String[6];
+   String[] box = new String[6];
    box[0] = "One";
    box[1] = "Two";
    box[2] = "Three";
