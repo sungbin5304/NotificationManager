@@ -9,7 +9,8 @@ NotificationManager for Android Java
    <pre><code>NotificationManager.createChannel(getApplicationContext(), "Channel Name", "Channal Description");</code></pre>
    
 3. Make Notification
-   <pre><code>NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");</code></pre>
+   ``` java
+   NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");</code></pre>
 
    Or
    
@@ -20,13 +21,16 @@ NotificationManager for Android Java
    box[3] = "Four";
    box[4] = "Five";
    box[5] = "Six";
-   NotificationManager.showInboxStyleNotification(getApplicationContext(), 2, "Title", "InBoxStyle Notification", box);</code></pre>
+   NotificationManager.showInboxStyleNotification(getApplicationContext(), 2, "Title", "InBoxStyle Notification", box);
+   ```
    
 <hr/>
 
 ## All Methods
-  <pre><code>@void setGroupName(String name)
+``` java
+@void setGroupName(String name)
 @void showNormalNotification(Context context, int id, String title, String content)
 @void showInboxStyleNotification(Context context, int id, String title, String content, String[] boxText)
 @void deleteNotification(Context context, int id)
-@int getSmallIcon()</code></pre>
+@int getSmallIcon()
+```
