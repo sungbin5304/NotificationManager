@@ -45,3 +45,5 @@ NotificationManager.showNormalNotification(applicationContext, 1, remoteMessage!
 @void deleteNotification(Context context, int id)
 @int getSmallIcon()
 ```
+
+# Happy Coding :)
