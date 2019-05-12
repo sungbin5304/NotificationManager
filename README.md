@@ -3,10 +3,14 @@ NotificationManager for Android Java
 
 ## How to use?
 1. Set Group name
-   <pre><code>NotificationManager.setGroupName("This is my Group.");</code></pre>
+   ``` java
+   NotificationManager.setGroupName("This is my Group.");
+   ```
 
 2. Create Notificaton Channel
-   <pre><code>NotificationManager.createChannel(getApplicationContext(), "Channel Name", "Channal Description");</code></pre>
+   ``` java
+   NotificationManager.createChannel(getApplicationContext(), "Channel Name", "Channal Description");
+   ```
    
 3. Make Notification
    ``` java
