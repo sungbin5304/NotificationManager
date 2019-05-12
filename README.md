@@ -1,19 +1,19 @@
 # NotificationManager
-NotificationManager for Android Java
+NotificationManager for Android
 
 ## How to use?
 1. Set Group name
-   ``` java
+   ``` kotlin
    NotificationManager.setGroupName("This is my Group.");
    ```
 
 2. Create Notificaton Channel
-   ``` java
+   ``` kotlin
    NotificationManager.createChannel(getApplicationContext(), "Channel Name", "Channal Description");
    ```
    
 3. Make Notification
-   ``` java
+   ``` kotlin
    NotificationManager.showNormalNotification(getApplicationContext(), 1, "Title", "Normal Notification");
 
    Or
@@ -30,8 +30,15 @@ NotificationManager for Android Java
    
 <hr/>
 
+## Example
+``` kotlin
+NotificationManager.setGroupName("SungStarBook")
+NotificationManager.createChannel(applicationContext, "Message Notification", "SungStarBook Message Notification")
+NotificationManager.showNormalNotification(applicationContext, 1, remoteMessage!!.data["title"]!!, remoteMessage.data["message"]!!)
+```
+
 ## All Methods
-``` java
+``` kotlin
 @void setGroupName(String name)
 @void showNormalNotification(Context context, int id, String title, String content)
 @void showInboxStyleNotification(Context context, int id, String title, String content, String[] boxText)
