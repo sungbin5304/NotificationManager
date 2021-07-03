@@ -1,115 +1,100 @@
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
+import android.app.NotificationManager
 import android.content.Context
-import android.graphics.Color
-import androidx.core.app.NotificationManagerCompat
-import com.sungbin.sungstarbook.R
+import android.os.Build
 
-
-object NotificationManager {
-
-    /**
-     * Created by SungBin on 2018. 01. 07.
-     */
-
-    private var GROUP_NAME = "undefined"
-
-    private val smallIcon: Int
-        get() = R.drawable.icon
-
-    fun setGroupName(name: String) {
-        GROUP_NAME = name
-    }
-
+@Suppress("DEPRECATION")
+object NotificationUtil {
     fun createChannel(context: Context, name: String, description: String) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val group1 = NotificationChannelGroup(GROUP_NAME, GROUP_NAME)
-            getManager(context).createNotificationChannelGroup(group1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getManager(context).createNotificationChannelGroup(
+                NotificationChannelGroup(
+                    name,
+                    name
+                )
+            )
 
             val channelMessage =
-                NotificationChannel(Channel.NAME, name, android.app.NotificationManager.IMPORTANCE_DEFAULT)
-            channelMessage.description = description
-            channelMessage.group = GROUP_NAME
-            channelMessage.lightColor = R.color.colorAccent
-            channelMessage.enableVibration(true)
-            channelMessage.vibrationPattern = longArrayOf(0, 0)
+                NotificationChannel(name, name, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    this.description = description
+                    group = name
+                    enableVibration(false)
+                }
             getManager(context).createNotificationChannel(channelMessage)
         }
     }
 
-    private fun getManager(context: Context): android.app.NotificationManager {
-        return context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+    private fun getManager(context: Context) =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    fun showNormalNotification(
+        context: Context,
+        id: Int,
+        channelId: String,
+        title: String,
+        content: String,
+        icon: Int,
+        isOnGoing: Boolean
+    ) {
+        getManager(context).notify(
+            id,
+            getNormalNotification(context, channelId, title, content, icon, isOnGoing).build()
+        )
     }
 
-    fun showNormalNotification(context: Context, id: Int, title: String, content: String) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val builder = Notification.Builder(context, Channel.NAME)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(smallIcon)
-                .setAutoCancel(true)
-                .setOngoing(true)
-            getManager(context).notify(id, builder.build())
-        } else {
-            val builder = Notification.Builder(context)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(smallIcon)
-                .setAutoCancel(true)
-                .setOngoing(true)
-            getManager(context).notify(id, builder.build())
+    fun showInboxStyleNotification(
+        context: Context,
+        id: Int,
+        channelId: String,
+        title: String,
+        content: String,
+        boxText: List<String>,
+        icon: Int,
+        isOnGoing: Boolean
+    ) {
+        var builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(context, channelId)
+        } else Notification.Builder(context)
+
+        builder = builder.setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(icon)
+            .setAutoCancel(true)
+            .setOngoing(isOnGoing)
+
+        val inboxStyle = Notification.InboxStyle()
+        inboxStyle.setBigContentTitle(title)
+        inboxStyle.setSummaryText(content)
+
+        for (element in boxText) {
+            inboxStyle.addLine(element)
         }
+
+        builder.style = inboxStyle
+
+        getManager(context).notify(id, builder.build())
     }
 
-    fun showInboxStyleNotification(context: Context, id: Int, title: String, content: String, boxText: Array<String>) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val builder = Notification.Builder(context, Channel.NAME)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(smallIcon)
-                .setAutoCancel(true)
-                .setOngoing(true)
-            val inboxStyle = Notification.InboxStyle()
-            inboxStyle.setBigContentTitle(title)
-            inboxStyle.setSummaryText(content)
+    fun getNormalNotification(
+        context: Context,
+        channelId: String,
+        title: String,
+        content: String,
+        icon: Int,
+        isOnGoing: Boolean
+    ): Notification.Builder {
+        var builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(context, channelId)
+        } else Notification.Builder(context)
 
-            for (str in boxText) {
-                inboxStyle.addLine(str)
-            }
+        builder = builder.setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(icon)
+            .setAutoCancel(true)
+            .setOngoing(isOnGoing)
 
-            builder.style = inboxStyle
-
-            getManager(context).notify(id, builder.build())
-        } else {
-            val builder = Notification.Builder(context)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(smallIcon)
-                .setAutoCancel(true)
-                .setOngoing(true)
-            val inboxStyle = Notification.InboxStyle()
-            inboxStyle.setBigContentTitle(title)
-            inboxStyle.setSummaryText(content)
-
-            for (str in boxText) {
-                inboxStyle.addLine(str)
-            }
-
-            builder.style = inboxStyle
-
-            getManager(context).notify(id, builder.build())
-        }
+        return builder
     }
-
-    fun deleteNotification(context: Context, id: Int) {
-        NotificationManagerCompat.from(context).cancel(id)
-    }
-    
-    annotation class Channel {
-        companion object {
-            const val NAME = "CHANNEL"
-        }
-    }
-
 }
