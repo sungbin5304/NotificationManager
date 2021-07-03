@@ -7,6 +7,11 @@ import android.os.Build
 
 @Suppress("DEPRECATION")
 object NotificationUtil {
+    private fun builder(context: Context, channelId: String) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(context, channelId)
+        } else Notification.Builder(context)
+
     fun createChannel(context: Context, name: String, description: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getManager(context).createNotificationChannelGroup(
@@ -54,11 +59,8 @@ object NotificationUtil {
         icon: Int,
         isOnGoing: Boolean
     ) {
-        var builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder(context, channelId)
-        } else Notification.Builder(context)
-
-        builder = builder.setContentTitle(title)
+        val builder = builder(context, channelId)
+            .setContentTitle(title)
             .setContentText(content)
             .setSmallIcon(icon)
             .setAutoCancel(true)
@@ -84,17 +86,10 @@ object NotificationUtil {
         content: String,
         icon: Int,
         isOnGoing: Boolean
-    ): Notification.Builder {
-        var builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder(context, channelId)
-        } else Notification.Builder(context)
-
-        builder = builder.setContentTitle(title)
-            .setContentText(content)
-            .setSmallIcon(icon)
-            .setAutoCancel(true)
-            .setOngoing(isOnGoing)
-
-        return builder
-    }
+    ) = builder(context, channelId)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setSmallIcon(icon)
+        .setAutoCancel(true)
+        .setOngoing(isOnGoing)
 }
